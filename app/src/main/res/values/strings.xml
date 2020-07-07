@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Wifi-Scan</string>
+    <string name="wifi_is_disabled">"Wifi is disabled ... We need to enable it"</string>
+    <string name="scanning_wifi">"Scanning Wifi ..."</string>
+</resources>
