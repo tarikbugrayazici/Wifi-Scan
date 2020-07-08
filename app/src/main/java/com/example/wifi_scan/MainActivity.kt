@@ -25,14 +25,12 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setWifiManager()
         permissionHelper.checkPermission { checkWifiIsEnabled() }
     }
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -56,8 +54,8 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, R.string.wifi_is_disabled, Toast.LENGTH_LONG)
                 .show()
             wifiManager.isWifiEnabled = true
-            scanWifi()
         }
+        scanWifi()
     }
 
     private fun setWifiManager() {

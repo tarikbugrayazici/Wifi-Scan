@@ -18,9 +18,10 @@ class PermissionHelper(private val activity: Activity) {
         )
 
         if (permission != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(activity, R.string.permission_granted, Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, R.string.permission_denied, Toast.LENGTH_SHORT).show()
             makeRequest()
         } else {
+            Toast.makeText(activity, R.string.permission_granted, Toast.LENGTH_SHORT).show()
             block()
         }
     }
