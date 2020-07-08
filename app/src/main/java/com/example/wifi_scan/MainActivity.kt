@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.os.Bundle
@@ -11,20 +12,43 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.recycler_view_item.*
+
 
 class MainActivity : AppCompatActivity() {
     lateinit var wifiManager: WifiManager
     private var connections = ArrayList<Model>()
     private var wifiScanResults: ArrayList<ScanResult>? = null
-    private var linkSpeed: Int? = null
+    private val REQUEST_CODE = 101
+    private val permissionHelper: PermissionHelper by lazy {
+        PermissionHelper(
+            this
+        )
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setWifiManager()
-        scanWifi()
-        checkWifiIsEnabled()
+        permissionHelper.checkPermission { checkWifiIsEnabled() }
+    }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
+        when (requestCode) {
+            REQUEST_CODE -> {
+
+                if ((grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED)) {
+                    Toast.makeText(this, R.string.permission_granted, Toast.LENGTH_SHORT).show()
+                    checkWifiIsEnabled()
+                } else {
+                    Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun checkWifiIsEnabled() {
@@ -32,6 +56,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, R.string.wifi_is_disabled, Toast.LENGTH_LONG)
                 .show()
             wifiManager.isWifiEnabled = true
+            scanWifi()
         }
     }
 
